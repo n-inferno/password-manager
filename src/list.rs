@@ -11,6 +11,10 @@ fn get_resources_list() -> Vec<String> {
 
 pub fn print_resources_list() {
     let lst = get_resources_list();
+    if lst.is_empty() {
+        println!("No resources found");
+        return;
+    }
     println!("You've registered following resources:");
     println!("  * {}", lst.join("\n  * "))
 }

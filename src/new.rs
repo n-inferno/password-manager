@@ -1,7 +1,8 @@
 use crate::service;
 use crate::structures::Password;
 
-pub fn add_password(resource: String, password: String, description: Option<String>) {
+pub fn add_password(resource: String, password: String,
+                    login: Option<String>, description: Option<String>) {
     let file = service::get_file_name(&service::get_home_dir());
     if !std::path::Path::new(&file).exists() {
         println!("You didn't init the password file. Try 'init' command");
@@ -12,8 +13,12 @@ pub fn add_password(resource: String, password: String, description: Option<Stri
         Some(desc) => desc,
         None => String::new()
     };
+    let login = match login {
+        Some(log) => log,
+        None => String::new()
+    };
 
-    let new_entry = Password { resource, password, description };
+    let new_entry = Password { resource, password, login, description };
 
     if check_if_pass_exists(&curr_content, new_entry.clone()) {
         println!("Resource already exists. Try to use command <change>");

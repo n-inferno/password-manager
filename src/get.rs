@@ -18,10 +18,13 @@ pub fn print_password(resource: String) {
         None => { println!("Resource not found"); return; },
         Some(val) => val
     };
-    print!("  * Resource: {}\n  * Password: {}", &password.resource, &password.password);
-    if !password.description.is_empty() {
-        print!("\n  * Description: {}", &password.description);
+    println!("  * Resource: {}", &password.resource);
+    if !password.login.is_empty() {
+        println!("  * Login: {}", &password.login);
     }
-    print!("\n");
+    println!("  * Password: {}", &password.password);
+    if !password.description.is_empty() {
+        println!("  * Description: {}", &password.description);
+    }
 
 }

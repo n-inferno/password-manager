@@ -19,7 +19,7 @@ fn main() {
     } else if request.command == "new" {
         let resource: String = request.resource.clone().unwrap();
         let psw = service::read_password();
-        new::add_password(resource, psw, request.description);
+        new::add_password(resource, psw, request.login, request.description);
 
     } else if request.command == "get" {
         let resource: String = request.resource.clone().unwrap();
@@ -32,7 +32,7 @@ fn main() {
         let resource: String = request.resource.clone().unwrap();
         let psw = service::read_password();
         let result = change::change_password(&resource, &psw,
-                                             &request.description);
+                                             &request.login, &request.description);
         match result {
             true => { println!("Data successfully changed") },
             false => { println!("Resource not found. Try command <new>") }
