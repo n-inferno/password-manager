@@ -2,12 +2,16 @@ mod structures;
 mod service;
 mod init;
 mod new;
+mod get;
+mod list;
+mod change;
+mod delete;
+
 use structopt::StructOpt;
 
 
 fn main() {
     let request = structures::UserCommand::from_args();
-    println!("{:#?}", &request);
 
     if request.command == "init" {
         init::create_new_passwords_file();
@@ -18,23 +22,28 @@ fn main() {
         new::add_password(resource, psw, request.description);
 
     } else if request.command == "get" {
-        unimplemented!()
+        let resource: String = request.resource.clone().unwrap();
+        get::print_password(resource);
+
     } else if request.command == "list" {
-        unimplemented!()
+        list::print_resources_list();
+
     } else if request.command == "change" {
-        unimplemented!()
+        let resource: String = request.resource.clone().unwrap();
+        let psw = service::read_password();
+        let result = change::change_password(&resource, &psw,
+                                             &request.description);
+        match result {
+            true => { println!("Data successfully changed") },
+            false => { println!("Resource not found. Try command <new>") }
+        }
+
     } else if request.command == "delete" {
-        unimplemented!()
+        let resource: String = request.resource.clone().unwrap();
+        let result = delete::delete_password(&resource);
+        match result {
+            true => { println!("Resource successfully deleted") },
+            false => { println!("Resource not found") }
+        }
     }
 }
-
-
-// commands:
-// init - инициализирует файл в папке ~/.password_manager
-// new -d <description> resource - создать новый пароль
-// get resource - получить пароль ресурса;
-//     -d также получить описание ресурса
-// list - список все ресурсов
-// change resource - изменить пароль ресурса;
-//     -d <description> также изменить описание ресурса
-// delete resource - удалить

@@ -53,3 +53,8 @@ pub fn read_password() -> String {
         std::io::stdout().flush().expect("error");
     }
 }
+
+pub fn get_all_passwords() -> Vec<Password> {
+    let file = get_file_name(&get_home_dir());
+    get_json(file)
+}

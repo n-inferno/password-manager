@@ -14,7 +14,7 @@ pub struct UserCommand {
 }
 
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Password {
     pub resource: String,
     pub password: String,

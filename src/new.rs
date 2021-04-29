@@ -25,7 +25,7 @@ pub fn add_password(resource: String, password: String, description: Option<Stri
     println!("Password successfully saved");
 }
 
-fn check_if_pass_exists(curr_content: &Vec<Password>,
+pub fn check_if_pass_exists(curr_content: &Vec<Password>,
                         new_entry: Password) -> bool {
     let mut result = false;
     for entry in curr_content.into_iter() {
