@@ -1,6 +1,8 @@
 <h3>Simple CLI password manager</h3>
 
+
 <h5>Options:</h5>
+
 `init` - initialize new password file. <br>
 
 `list` - list of all resources you have. <br>
