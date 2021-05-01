@@ -10,12 +10,14 @@
 `new <resource>` - add new password for resource. 
 After calling this option, you are to enter password. <br>
 `-d` - option to add a resource description. <br>
+`-l --login` - option to add login. <br>
 
-`get <resource>` - get resource password and description (if any). <br>
+`get <resource>` - get resource password, login and description. <br>
 
 `change <resource>` - change password for resource.
 After calling this option, you are to enter password. <br>
 `-d` - option to change resource description. <br>
+`-l --login` - option to change login. <br>
 
 `delete <resource>` - delete resource from list. <br>
 

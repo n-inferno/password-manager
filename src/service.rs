@@ -1,7 +1,6 @@
 use crate::structures::Password;
-use std::fs::File;
 use std::io::Write;
-
+use crate::cryptography;
 
 pub fn get_file_name(home_dir: &String) -> String {
     let username = whoami::username();
@@ -20,21 +19,26 @@ pub fn get_home_dir() -> String {
     home_dir
 }
 
-pub fn get_json(file: String) -> Vec<Password> {
-    let content = std::fs::read_to_string(file).unwrap_or_default();
+pub fn get_json(file: String, master_pass: &String) -> Vec<Password> {
+    let content_encrypted = std::fs::read(file).unwrap_or_default();
     let mut json: Vec<Password> = Vec::new();
-    if !content.is_empty() {
+    if !content_encrypted.is_empty() {
+    let master_pass_hash = cryptography::get_password_hash(&master_pass);
+    let content = cryptography::decrypt(master_pass_hash,
+                                        content_encrypted);
         json = serde_json::from_str(&content)
             .expect("JSON was not well-formatted");
     }
     json
 }
 
-pub fn write_json(json: Vec<Password>) {
+pub fn write_json(json: Vec<Password>, master_pass: &String) {
     let path = get_file_name(&get_home_dir());
-    let descriptor = File::create(path).unwrap();
-    serde_json::to_writer_pretty(descriptor, &json)
+    let text = serde_json::to_string(&json)
         .expect("Invalid json format");
+    let master_pass_hash = cryptography::get_password_hash(&master_pass);
+    let ciphertext = cryptography::encrypt(master_pass_hash, text);
+    std::fs::write(&path, &ciphertext).unwrap();
 }
 
 
@@ -54,7 +58,13 @@ pub fn read_password() -> String {
     }
 }
 
-pub fn get_all_passwords() -> Vec<Password> {
+pub fn get_all_passwords(master_pass: &String) -> Vec<Password> {
     let file = get_file_name(&get_home_dir());
-    get_json(file)
+    get_json(file, &master_pass)
+}
+
+pub fn get_master_pass() -> String {
+    print!("Enter your master password: ");
+    std::io::stdout().flush().expect("error");
+    rpassword::read_password().expect("error reading password")
 }

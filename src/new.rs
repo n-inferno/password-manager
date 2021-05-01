@@ -1,14 +1,14 @@
 use crate::service;
 use crate::structures::Password;
 
-pub fn add_password(resource: String, password: String,
-                    login: Option<String>, description: Option<String>) {
+pub fn add_password(resource: String, password: String, login: Option<String>,
+                    description: Option<String>, master_pass: &String) {
     let file = service::get_file_name(&service::get_home_dir());
     if !std::path::Path::new(&file).exists() {
         println!("You didn't init the password file. Try 'init' command");
         return
     }
-    let mut curr_content = service::get_json(file);
+    let mut curr_content = service::get_json(file, master_pass);
     let description = match description {
         Some(desc) => desc,
         None => String::new()
@@ -26,7 +26,7 @@ pub fn add_password(resource: String, password: String,
     }
 
     curr_content.push(new_entry);
-    service::write_json(curr_content);
+    service::write_json(curr_content, master_pass);
     println!("Password successfully saved");
 }
 
